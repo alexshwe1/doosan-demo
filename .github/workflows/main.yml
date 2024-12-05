@@ -24,11 +24,14 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      # Export environment variables globally
+      - name: Set Environment Variables
+        run: |
+          echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> $GITHUB_ENV
+          echo "APP_URL=${{ vars.APP_URL }}" >> $GITHUB_ENV
+
       # Build the project
       - name: Build Project
-        env:
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          APP_URL: ${{ vars.APP_URL }}
         run: npm run build
 
       # Login to DBOS Cloud
@@ -39,7 +42,4 @@ jobs:
 
       # Deploy to DBOS Cloud
       - name: Deploy to DBOS Cloud
-        env:
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          APP_URL: ${{ vars.APP_URL }}
         run: npx dbos-cloud app deploy
