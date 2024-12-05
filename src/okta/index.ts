@@ -104,18 +104,6 @@ export class Frontend {
     if (!code) {
       return `<h1>Error</h1><p>Authorization code not found in the query parameters.</p>`;
     }
-
-    if (CLIENT_SECRET) {
-      ctx.logger.info(
-        `DEBUG: CLIENT_SECRET is set. First 4: ${CLIENT_SECRET.slice(0, 4)}, Last 4: ${CLIENT_SECRET.slice(-4)}`
-      );
-    } else {
-      ctx.logger.info("DEBUG: CLIENT_SECRET is not set.");
-    }
-
-    ctx.logger.info(
-      `DEBUG: REDIRECT_URI is ${REDIRECT_URI}}`
-    );
   
     const tokenResponse = await fetch(TOKEN_ENDPOINT, {
       method: "POST",
