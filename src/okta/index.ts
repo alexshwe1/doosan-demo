@@ -7,6 +7,7 @@ const AUTH0_ISSUER = "https://dev-n7n30lyv58l7gwl7.us.auth0.com/";
 const TOKEN_ENDPOINT = `${AUTH0_ISSUER}oauth/token`;
 const CLIENT_ID = "3zsQ5a1TxicbHNzv0rIjraoI5jTVfCvv";
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
+
 const REDIRECT_URI = `${process.env.APP_URL}/callback`;
 
 // --- Secure Workflow ---
@@ -103,6 +104,18 @@ export class Frontend {
     if (!code) {
       return `<h1>Error</h1><p>Authorization code not found in the query parameters.</p>`;
     }
+
+    if (CLIENT_SECRET) {
+      console.log(
+        `DEBUG: CLIENT_SECRET is set. First 4: ${CLIENT_SECRET.slice(0, 4)}, Last 4: ${CLIENT_SECRET.slice(-4)}`
+      );
+    } else {
+      console.log("DEBUG: CLIENT_SECRET is not set.");
+    }
+
+    console.log(
+      `DEBUG: REDIRECT_URI is ${REDIRECT_URI}}`
+    );
   
     const tokenResponse = await fetch(TOKEN_ENDPOINT, {
       method: "POST",
