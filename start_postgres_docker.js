@@ -1,7 +1,7 @@
 const { execSync } = require('child_process');
 
 // Default PostgreSQL port
-let port = '5432';
+let port = '5433';
 
 // Set the host PostgreSQL port with the -p/--port flag.
 process.argv.forEach((val, index) => {

@@ -6,7 +6,7 @@
 language: node
 database:
   hostname: localhost
-  port: 5432
+  port: 5433
   username: postgres
   password: ${PGPASSWORD}
   connectionTimeoutMillis: 3000
@@ -17,4 +17,7 @@ database:
     - npx knex migrate:rollback
 runtimeConfig:
   entrypoints:
-    - dist/operations.js
+    - dist/auth/middleware.js
+    - dist/okta/index.js
+env:
+  APP_URL: ${APP_URL}
