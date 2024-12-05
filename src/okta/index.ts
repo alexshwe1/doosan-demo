@@ -7,7 +7,7 @@ const AUTH0_ISSUER = "https://dev-n7n30lyv58l7gwl7.us.auth0.com/";
 const TOKEN_ENDPOINT = `${AUTH0_ISSUER}oauth/token`;
 const CLIENT_ID = "3zsQ5a1TxicbHNzv0rIjraoI5jTVfCvv";
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = "https://a54b-50-171-91-66.ngrok-free.app/callback";
+const REDIRECT_URI = `${process.env.APP_URL}/callback`;
 
 // --- Secure Workflow ---
 @Authentication(AuthMiddleware.authenticate)
