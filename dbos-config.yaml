@@ -19,6 +19,7 @@ runtimeConfig:
   entrypoints:
     - dist/auth/middleware.js
     - dist/okta/index.js
+    - dist/frontend/index.js
 env:
   APP_URL: ${APP_URL}
   CLIENT_SECRET: ${CLIENT_SECRET}

@@ -1,6 +1,7 @@
-import { MiddlewareContext } from '@dbos-inc/dbos-sdk';
+import { GetApi, HandlerContext, MiddlewareContext } from '@dbos-inc/dbos-sdk';
 import { JwtHeader, verify } from "jsonwebtoken";
 import jwksRsa from "jwks-rsa";
+import querystring from "querystring";
 
 type TokenPayload = {
   sub: string; // Subject
@@ -12,6 +13,9 @@ type TokenPayload = {
 const AUTH0_ISSUER = "https://dev-n7n30lyv58l7gwl7.us.auth0.com/";
 const JWKS_URI = `${AUTH0_ISSUER}.well-known/jwks.json`;
 const CLIENT_ID = "3zsQ5a1TxicbHNzv0rIjraoI5jTVfCvv";
+const TOKEN_ENDPOINT = `${AUTH0_ISSUER}oauth/token`;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const REDIRECT_URI = `${process.env.APP_URL}/callback`;
 
 const jwksClient = jwksRsa({
   jwksUri: JWKS_URI,
@@ -82,5 +86,55 @@ export class AuthMiddleware {
     } catch (error) {
       throw new Error("Invalid or expired token");
     }
+  }
+
+  @GetApi("/callback")
+  static async callback(ctx: HandlerContext): Promise<string> {
+    const { code } = ctx.request.query as { code: string };
+  
+    if (!code) {
+      return `<h1>Error</h1><p>Authorization code not found in the query parameters.</p>`;
+    }
+  
+    const tokenResponse = await fetch(TOKEN_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: querystring.stringify({
+        grant_type: "authorization_code",
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        redirect_uri: REDIRECT_URI,
+        code,
+      }),
+    });
+  
+    const rawResponse = await tokenResponse.text();
+  
+    if (!tokenResponse.ok) {
+      return `<h1>Error</h1><p>Token endpoint returned an error: ${rawResponse}</p>`;
+    }
+  
+    let tokenData;
+    try {
+      tokenData = JSON.parse(rawResponse);
+    } catch (err) {
+      return `<h1>Error</h1><p>Failed to parse token response: ${rawResponse}</p>`;
+    }
+  
+    if (tokenData.error) {
+      return `<h1>Error</h1><p>${tokenData.error_description}</p>`;
+    }
+  
+    // Store id_token in localStorage
+    const script = `
+      <script>
+        localStorage.setItem('id_token', '${tokenData.id_token}'); // Save id_token
+        window.location.href = '/';
+      </script>
+    `;
+  
+    return `<p>Redirecting...</p>${script}`;
   }
 }
