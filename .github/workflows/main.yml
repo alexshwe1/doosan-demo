@@ -20,6 +20,17 @@ jobs:
         with:
           node-version: '20'
 
+      # Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Build the project
+      - name: Build Project
+        env:
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          APP_URL: ${{ vars.APP_URL }}
+        run: npm run build
+
       # Login to DBOS Cloud
       - name: Login to DBOS Cloud
         env:
