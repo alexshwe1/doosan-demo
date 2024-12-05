@@ -1,0 +1,42 @@
+name: Deploy to DBOS Cloud
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Build the project
+      - name: Build Project
+        env:
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          APP_URL: ${{ vars.APP_URL }}
+        run: npm run build
+
+      # Login to DBOS Cloud
+      - name: Login to DBOS Cloud
+        env:
+          REFRESH_TOKEN: ${{ secrets.DBOS_REFRESH_TOKEN }}
+        run: npx dbos-cloud login --with-refresh-token $REFRESH_TOKEN
+
+      # Deploy to DBOS Cloud
+      - name: Deploy to DBOS Cloud
+        run: npx dbos-cloud app deploy
