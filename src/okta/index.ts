@@ -106,14 +106,14 @@ export class Frontend {
     }
 
     if (CLIENT_SECRET) {
-      console.log(
+      ctx.logger.info(
         `DEBUG: CLIENT_SECRET is set. First 4: ${CLIENT_SECRET.slice(0, 4)}, Last 4: ${CLIENT_SECRET.slice(-4)}`
       );
     } else {
-      console.log("DEBUG: CLIENT_SECRET is not set.");
+      ctx.logger.info("DEBUG: CLIENT_SECRET is not set.");
     }
 
-    console.log(
+    ctx.logger.info(
       `DEBUG: REDIRECT_URI is ${REDIRECT_URI}}`
     );
   
