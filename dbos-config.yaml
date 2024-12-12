@@ -20,6 +20,8 @@ runtimeConfig:
     - dist/auth/middleware.js
     - dist/okta/index.js
     - dist/frontend/index.js
+    - dist/basics/index.js
+    - dist/costSavings/index.js
 env:
   APP_URL: ${APP_URL}
   CLIENT_SECRET: ${CLIENT_SECRET}
