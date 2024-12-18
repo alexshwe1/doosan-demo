@@ -65,6 +65,7 @@ export class DbosBasics {
    *
    * @param ctxt
    */
+  @GetApi("/external/products")
   @Step()
   static async fetchExternalProduct(ctxt: StepContext) {
     const response = await fetch("https://fakestoreapi.com/products/3");
