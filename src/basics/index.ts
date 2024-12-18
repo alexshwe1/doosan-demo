@@ -30,7 +30,7 @@ export class DbosBasics {
    * @param ctxt
    * @param product
    */
-  @PostApi("/product")
+  @PostApi("/products")
   @Transaction()
   static async insertProduct(
     ctxt: TransactionContext<Knex>,
@@ -45,6 +45,7 @@ export class DbosBasics {
    *
    * @param ctxt
    */
+  @GetApi("/products")
   @Transaction({ readOnly: true })
   static async getProducts(
     ctxt: TransactionContext<Knex>
